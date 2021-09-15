@@ -1,12 +1,16 @@
+from utils import validators
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password, first_name, last_name):
+    def create_user(self, email: str, password: str, first_name: str, last_name: str) -> "User":
         """creates a new user using provided details"""
-        user = self.model(email=email, first_name=first_name,
+        if not validators.isEmailValid(email):
+            raise ValueError('User must have valid email address.')
+
+        user = self.model(email=email.lower(), first_name=first_name,
                           last_name=last_name)
         user.set_password(password)
         user.save(using=self._db)
