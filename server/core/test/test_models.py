@@ -58,7 +58,7 @@ class LinkModelTests(TestCase):
         user = get_user_model().objects.create_user(**default)
 
         link = models.Link.objects.create(
-            url='www.test.com', description='test url', order=0, user=user)
+            url='www.test.com', description='test url', order=0, user_id=user.id)
 
         self.assertEqual(link.url, 'www.test.com')
         self.assertEqual(link.description, 'test url')
@@ -88,7 +88,7 @@ class NoteModelTests(TestCase):
         with patch('django.utils.timezone.now') as now:
             now.return_value = datetime
             note = models.Note.objects.create(
-                title=title, content=content, user=user)
+                title=title, content=content, user_id=user.id)
 
             self.assertEqual(note.title, title)
             self.assertEqual(note.content, content)
@@ -106,7 +106,7 @@ class NoteModelTests(TestCase):
         content = "this is my new note"
 
         note = models.Note.objects.create(
-            title=title, content=content, user=user)
+            title=title, content=content, user_id=user.id)
 
         self.assertEqual(note.created_date, note.last_updated_date)
         self.assertFalse(note.hasBeenEdited())
